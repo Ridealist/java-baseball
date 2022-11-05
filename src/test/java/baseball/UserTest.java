@@ -2,6 +2,8 @@ package baseball;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -45,5 +47,25 @@ class UserTest {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void getValidatedInput_WhenRun_getUserInputList_Success() {
+        String input = "123";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+        user.setUserInput();
+        List<Integer> inputArray = user.getValidatedInput();
+        assertThat(inputArray).isEqualTo(Arrays.asList(1, 2, 3));
+    }
+
+    @Test
+    void getValidatedInput_WhenRun_getUserInputList_Fail() {
+        String input = "103";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+        user.setUserInput();
+        assertThatThrownBy(() -> user.getValidatedInput())
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
